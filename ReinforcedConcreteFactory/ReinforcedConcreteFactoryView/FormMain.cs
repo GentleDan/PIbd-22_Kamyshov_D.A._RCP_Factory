@@ -174,5 +174,11 @@ namespace ReinforcedConcreteFactoryView
             var form = Container.Resolve<FormImplementers>();
             form.ShowDialog();
         }
+
+        private void mailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormMail>();
+            form.ShowDialog();
+        }
     }
 }

@@ -30,6 +30,14 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
 
         public void CreateOrUpdate(ImplementerBindingModel model)
         {
+            var element = _implementerStorage.GetElement(new ImplementerBindingModel
+            {
+                ImplementerFIO = model.ImplementerFIO
+            });
+            if (element != null && element.Id != model.Id)
+            {
+                throw new Exception("Уже есть исполнитель с таким ФИО");
+            }
             if (model.Id.HasValue)
             {
                 _implementerStorage.Update(model);

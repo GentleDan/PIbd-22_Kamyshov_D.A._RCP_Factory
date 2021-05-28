@@ -1,0 +1,63 @@
+﻿@using ReinforcedConcreteFactoryBusinessLogic.ViewModels
+@model (List<MessageInfoViewModel> list, bool hasNext, int page)
+@{
+    ViewData["Title"] = "Письма"; }
+<div class="text-center">
+    <h1 class="display-4">Письма</h1>
+</div>
+<div class="text-center">
+    @{
+        if (Model.list == null)
+        {
+            <h3 class="display-4">Авторизируйтесь</h3>
+            return;
+        }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Отправитель
+                    </th>
+                    <th>
+                        Заголовок
+                    </th>
+                    <th>
+                        Дата письма
+                    </th>
+                    <th>
+                        Текст
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.list)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SenderName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateDelivery)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Body)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table> }
+</div>
+<div class="text-center">
+    @{ if ((Model.page - 1) >= 1)
+        {
+            <a asp-action="Mail" asp-route-page="@(Model.page-1)">Prev</a>
+        }
+        <span style="font-weight: bold;">@(Model.page)</span>
+        if (Model.hasNext)
+        {
+            <a asp-action="Mail" asp-route-page="@(Model.page+1)">Next</a> }
+    }
+</div> 

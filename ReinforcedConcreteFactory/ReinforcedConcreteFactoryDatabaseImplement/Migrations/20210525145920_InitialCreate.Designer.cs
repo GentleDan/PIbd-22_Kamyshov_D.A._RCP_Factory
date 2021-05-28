@@ -10,7 +10,7 @@ using ReinforcedConcreteFactoryDatabaseImplement;
 namespace ReinforcedConcreteFactoryDatabaseImplement.Migrations
 {
     [DbContext(typeof(ReinforcedConcreteFactoryDatabase))]
-    [Migration("20210505085704_InitialCreate")]
+    [Migration("20210525145920_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,33 @@ namespace ReinforcedConcreteFactoryDatabaseImplement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("ReinforcedConcreteFactoryDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateDelivery")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("MessageInfos");
                 });
 
             modelBuilder.Entity("ReinforcedConcreteFactoryDatabaseImplement.Models.Order", b =>
@@ -215,6 +242,13 @@ namespace ReinforcedConcreteFactoryDatabaseImplement.Migrations
                     b.HasIndex("StoreHouseId");
 
                     b.ToTable("StoreHouseMaterials");
+                });
+
+            modelBuilder.Entity("ReinforcedConcreteFactoryDatabaseImplement.Models.MessageInfo", b =>
+                {
+                    b.HasOne("ReinforcedConcreteFactoryDatabaseImplement.Models.Client", "Client")
+                        .WithMany("MessageInfos")
+                        .HasForeignKey("ClientId");
                 });
 
             modelBuilder.Entity("ReinforcedConcreteFactoryDatabaseImplement.Models.Order", b =>

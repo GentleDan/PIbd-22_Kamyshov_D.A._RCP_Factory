@@ -1,5 +1,6 @@
 ﻿using ReinforcedConcreteFactoryBusinessLogic.BindingModels;
 using ReinforcedConcreteFactoryBusinessLogic.Enums;
+using ReinforcedConcreteFactoryBusinessLogic.HelperModels;
 using ReinforcedConcreteFactoryBusinessLogic.Interfaces;
 using ReinforcedConcreteFactoryBusinessLogic.ViewModels;
 using System;
@@ -12,12 +13,14 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
         private readonly IOrderStorage _orderStorage;
         private readonly IReinforcedStorage _reinforcedStorage;
         private readonly IStoreHouseStorage _storeHouseStorage;
+        private readonly IClientStorage _clientStorage;
         private readonly object locker = new object();
-        public OrderLogic(IOrderStorage orderStorage, IReinforcedStorage reinforcedStorage, IStoreHouseStorage storeHouseStorage)
+        public OrderLogic(IOrderStorage orderStorage, IReinforcedStorage reinforcedStorage, IStoreHouseStorage storeHouseStorage, IClientStorage clientStorage)
         {
             _orderStorage = orderStorage;
             _reinforcedStorage = reinforcedStorage;
             _storeHouseStorage = storeHouseStorage;
+            _clientStorage = clientStorage;
         }
         public List<OrderViewModel> Read(OrderBindingModel model)
         {
@@ -42,6 +45,15 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
                 DateCreate = DateTime.Now,
                 Status = OrderStatus.Принят
             });
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                {
+                    Id = model.ClientId
+                })?.Email,
+                Subject = $"Новый заказ",
+                Text = $"Заказ от {DateTime.Now} на сумму {model.Sum:N2} принят."
+            });
         }
         public void TakeOrderInWork(ChangeStatusBindingModel model)
         {
@@ -65,6 +77,8 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
                     Id = order.Id,
                     ReinforcedId = order.ReinforcedId,
                     ImplementerId = model.ImplementerId,
+                    DateImplement = DateTime.Now,
+                    Status = OrderStatus.Выполняется,
                     Count = order.Count,
                     Sum = order.Sum,
                     DateCreate = order.DateCreate,
@@ -83,6 +97,15 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
                   
                 }
                 _orderStorage.Update(updateBindingModel);
+                MailLogic.MailSendAsync(new MailSendInfo
+                {
+                    MailAddress = _clientStorage.GetElement(new ClientBindingModel
+                    {
+                        Id = order.ClientId
+                    })?.Email,
+                    Subject = $"Заказ №{order.Id}",
+                    Text = $"Заказ №{order.Id} передан в работу."
+                });
             }
         }
         public void FinishOrder(ChangeStatusBindingModel model)
@@ -111,6 +134,12 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
                 DateImplement = order.DateImplement,
                 Status = OrderStatus.Готов
             });
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = order.ClientId })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} выполнен."
+            });
         }
         public void PayOrder(ChangeStatusBindingModel model)
         {
@@ -137,6 +166,12 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
                 DateCreate = order.DateCreate,
                 DateImplement = order.DateImplement,
                 Status = OrderStatus.Оплачен
+            });
+            MailLogic.MailSendAsync(new MailSendInfo
+            {
+                MailAddress = _clientStorage.GetElement(new ClientBindingModel { Id = order.ClientId })?.Email,
+                Subject = $"Заказ №{order.Id}",
+                Text = $"Заказ №{order.Id} оплачен."
             });
         }
     }
