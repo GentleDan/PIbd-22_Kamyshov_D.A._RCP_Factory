@@ -26,14 +26,7 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                List<ReinforcedConcreteFactoryBusinessLogic.ViewModels.ReinforcedViewModel> list = logic.Read(null);
-                if (list != null)
-                {
-                    dataReinforcedsGridView.DataSource = list;
-                    dataReinforcedsGridView.Columns[0].Visible = false;
-                    dataReinforcedsGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dataReinforcedsGridView.Columns[3].Visible = false;
-                }
+                Program.ConfigGrid(logic.Read(null), dataReinforcedsGridView);
             }
             catch (Exception ex)
             {

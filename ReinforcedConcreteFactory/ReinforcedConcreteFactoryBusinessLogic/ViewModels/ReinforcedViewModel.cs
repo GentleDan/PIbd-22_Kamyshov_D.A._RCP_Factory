@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.Serialization;
+using ReinforcedConcreteFactoryBusinessLogic.Attributes;
 
 namespace ReinforcedConcreteFactoryBusinessLogic.ViewModels
 {
@@ -8,12 +8,13 @@ namespace ReinforcedConcreteFactoryBusinessLogic.ViewModels
     public class ReinforcedViewModel
     {
         [DataMember]
+        [Column(title: "Номер", width: 50)]
         public int Id { get; set; }
         [DataMember]
-        [DisplayName("Название изделия")]
+        [Column(title: "Название изделия", gridViewAutoSize: GridViewAutoSize.Fill)]
         public string ReinforcedName { get; set; }
         [DataMember]
-        [DisplayName("Цена")]
+        [Column(title: "Цена", width: 100)]
         public decimal Price { get; set; }
         [DataMember]
         public Dictionary<int, (string, int)> ReinforcedMaterial { get; set; }

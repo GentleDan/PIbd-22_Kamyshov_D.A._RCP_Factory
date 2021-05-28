@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using ReinforcedConcreteFactoryBusinessLogic.Attributes;
 
 namespace ReinforcedConcreteFactoryBusinessLogic.ViewModels
 {
@@ -7,18 +7,19 @@ namespace ReinforcedConcreteFactoryBusinessLogic.ViewModels
     public class ClientViewModel
     {
         [DataMember]
+        [Column(title: "Номер", width: 50)]
         public int Id { get; set; }
 
         [DataMember]
-        [DisplayName("ФИО клиента")]
+        [Column(title: "ФИО клиента", gridViewAutoSize: GridViewAutoSize.Fill)]
         public string ClientFIO { get; set; }
 
         [DataMember]
-        [DisplayName("Логин")]
+        [Column(title: "Логин", width: 100)]
         public string Email { get; set; }
 
         [DataMember]
-        [DisplayName("Пароль")]
+        [Column(title: "Пароль", width: 100)]
         public string Password { get; set; }
     }
 }

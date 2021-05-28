@@ -39,11 +39,12 @@
             this.reinforcedMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ordersListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startWorkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataOrderFactoryGridView = new System.Windows.Forms.DataGridView();
             this.createOrderButton = new System.Windows.Forms.Button();
             this.orderPaidButton = new System.Windows.Forms.Button();
             this.refreshListButton = new System.Windows.Forms.Button();
-            this.mailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createBackUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataOrderFactoryGridView)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +55,8 @@
             this.referencesToolStripMenuItem,
             this.отчетыToolStripMenuItem,
             this.startWorkToolStripMenuItem,
-            this.mailToolStripMenuItem});
+            this.mailToolStripMenuItem,
+            this.createBackUpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1050, 24);
@@ -138,6 +140,13 @@
             this.startWorkToolStripMenuItem.Text = "Запуск работ";
             this.startWorkToolStripMenuItem.Click += new System.EventHandler(this.startWorkToolStripMenuItem_Click);
             // 
+            // mailToolStripMenuItem
+            // 
+            this.mailToolStripMenuItem.Name = "mailToolStripMenuItem";
+            this.mailToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.mailToolStripMenuItem.Text = "Письма";
+            this.mailToolStripMenuItem.Click += new System.EventHandler(this.mailToolStripMenuItem_Click);
+            // 
             // dataOrderFactoryGridView
             // 
             this.dataOrderFactoryGridView.BackgroundColor = System.Drawing.SystemColors.Control;
@@ -179,12 +188,12 @@
             this.refreshListButton.UseVisualStyleBackColor = true;
             this.refreshListButton.Click += new System.EventHandler(this.refreshListButton_Click);
             // 
-            // mailToolStripMenuItem
+            // createBackUpToolStripMenuItem
             // 
-            this.mailToolStripMenuItem.Name = "mailToolStripMenuItem";
-            this.mailToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.mailToolStripMenuItem.Text = "Письма";
-            this.mailToolStripMenuItem.Click += new System.EventHandler(this.mailToolStripMenuItem_Click);
+            this.createBackUpToolStripMenuItem.Name = "createBackUpToolStripMenuItem";
+            this.createBackUpToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
+            this.createBackUpToolStripMenuItem.Text = "Создать бекап";
+            this.createBackUpToolStripMenuItem.Click += new System.EventHandler(this.createBackUpToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -225,5 +234,6 @@
         private System.Windows.Forms.ToolStripMenuItem implementersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem startWorkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mailToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createBackUpToolStripMenuItem;
     }
 }
