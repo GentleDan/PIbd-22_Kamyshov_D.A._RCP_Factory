@@ -2,6 +2,7 @@
 using ReinforcedConcreteFactoryBusinessLogic.BusinessLogics;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -14,12 +15,14 @@ namespace ReinforcedConcreteFactoryView
         private readonly OrderLogic _orderLogic;
         private readonly ReportLogic _report;
         private readonly WorkModeling _workModeling;
-        public FormMain(OrderLogic orderLogic, ReportLogic reportLogic, WorkModeling workModeling)
+        private readonly BackUpAbstractLogic _backUpAbstractLogic;
+        public FormMain(OrderLogic orderLogic, ReportLogic reportLogic, WorkModeling workModeling, BackUpAbstractLogic backUpAbstractLogic)
         {
             InitializeComponent();
             _orderLogic = orderLogic;
             _report = reportLogic;
             _workModeling = workModeling;
+            _backUpAbstractLogic = backUpAbstractLogic;
         }
         private void FormMain_Load(object sender, EventArgs e)
         {
@@ -29,16 +32,7 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                List<ReinforcedConcreteFactoryBusinessLogic.ViewModels.OrderViewModel> list = _orderLogic.Read(null);
-                if (list != null)
-                {
-                    dataOrderFactoryGridView.DataSource = list;
-                    dataOrderFactoryGridView.Columns[0].Visible = false;
-                    dataOrderFactoryGridView.Columns[1].Visible = false;
-                    dataOrderFactoryGridView.Columns[2].Visible = false;
-                    dataOrderFactoryGridView.Columns[3].Visible = false;
-                    dataOrderFactoryGridView.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }
+                Program.ConfigGrid(_orderLogic.Read(null), dataOrderFactoryGridView);
             }
             catch (Exception ex)
             {
@@ -96,9 +90,13 @@ namespace ReinforcedConcreteFactoryView
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    _report.SaveReinforcedToWordFile(new ReportBindingModel
+                    MethodInfo method = _report.GetType().GetMethod("SaveReinforcedToWordFile");
+                    method.Invoke(_report, new object[]
                     {
-                        FileName = dialog.FileName
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                            }
                     });
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -136,9 +134,13 @@ namespace ReinforcedConcreteFactoryView
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    _report.SaveStoreHousesToWordFile(new ReportBindingModel
+                    MethodInfo method = _report.GetType().GetMethod("SaveStoreHousesToWordFile");
+                    method.Invoke(_report, new object[]
                     {
-                        FileName = dialog.FileName
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                            }
                     });
 
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -179,6 +181,29 @@ namespace ReinforcedConcreteFactoryView
         {
             var form = Container.Resolve<FormMail>();
             form.ShowDialog();
+        }
+
+        private void createBackUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_backUpAbstractLogic != null)
+                {
+                    var fbd = new FolderBrowserDialog();
+                    if (fbd.ShowDialog() == DialogResult.OK)
+                    {
+                        _backUpAbstractLogic.CreateArchive(fbd.SelectedPath);
+                        MessageBox.Show("Бекап создан", "Сообщение",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+               MessageBoxIcon.Error);
+            }
+
         }
     }
 }

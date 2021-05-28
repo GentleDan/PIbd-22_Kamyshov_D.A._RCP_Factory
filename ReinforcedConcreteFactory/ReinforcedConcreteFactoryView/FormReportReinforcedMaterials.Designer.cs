@@ -88,7 +88,7 @@
             this.Controls.Add(this.saveToExcelButton);
             this.Name = "FormReportReinforcedMaterials";
             this.Text = "Материалы по изделиям";
-            this.Load += new System.EventHandler(this.FormReportProductComponents_Load);
+            this.Load += new System.EventHandler(this.FormReportReinforcedMaterials_Load);
             ((System.ComponentModel.ISupportInitialize)(this.reportReinforcedMaterialsDataGridView)).EndInit();
             this.ResumeLayout(false);
 

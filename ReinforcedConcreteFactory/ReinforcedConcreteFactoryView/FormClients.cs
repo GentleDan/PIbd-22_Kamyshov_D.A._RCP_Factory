@@ -50,13 +50,7 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                var list = logic.Read(null);
-                if (list != null)
-                {
-                    ClientsDataGridView.DataSource = list;
-                    ClientsDataGridView.Columns[0].Visible = false;
-                    ClientsDataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }
+                Program.ConfigGrid(logic.Read(null), ClientsDataGridView);
             }
             catch (Exception ex)
             {

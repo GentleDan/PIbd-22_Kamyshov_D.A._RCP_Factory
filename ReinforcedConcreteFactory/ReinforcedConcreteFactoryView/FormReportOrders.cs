@@ -4,7 +4,7 @@ using Microsoft.Reporting.WinForms;
 using System;
 using System.Windows.Forms;
 using Unity;
-
+using System.Reflection;
 
 namespace ReinforcedConcreteFactoryView
 {
@@ -36,10 +36,14 @@ namespace ReinforcedConcreteFactoryView
                 " по " +
                dateTimePickerTo.Value.ToShortDateString());
                 reportViewerOrders.LocalReport.SetParameters(parameter);
-                var dataSource = logic.GetOrders(new ReportBindingModel
+                MethodInfo method = logic.GetType().GetMethod("GetOrders");
+                var dataSource = method.Invoke(logic, new object[]
                 {
-                    DateFrom = dateTimePickerFrom.Value,
-                    DateTo = dateTimePickerTo.Value
+                    new ReportBindingModel
+                    {
+                        DateFrom = dateTimePickerFrom.Value,
+                        DateTo = dateTimePickerTo.Value
+                    }
                 });
                 ReportDataSource source = new ReportDataSource("DataSetOrders",
                dataSource);
@@ -68,11 +72,15 @@ namespace ReinforcedConcreteFactoryView
                 {
                     try
                     {
-                        logic.SaveOrdersToPdfFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveOrdersToPdfFile");
+                        method.Invoke(logic, new object[]
                         {
-                            FileName = dialog.FileName,
-                            DateFrom = dateTimePickerFrom.Value,
-                            DateTo = dateTimePickerTo.Value
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                                DateFrom = dateTimePickerFrom.Value,
+                                DateTo = dateTimePickerTo.Value
+                            }
                         });
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);

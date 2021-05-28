@@ -52,6 +52,7 @@ namespace ReinforcedConcreteFactoryView
                 {
                     buttonPrev.Enabled = true;
                 }
+                Program.ConfigGrid(logic.Read(null), dataGridViewMail);
             }
             catch (Exception ex)
             {

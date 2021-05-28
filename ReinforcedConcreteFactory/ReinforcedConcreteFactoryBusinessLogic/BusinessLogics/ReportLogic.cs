@@ -5,6 +5,7 @@ using ReinforcedConcreteFactoryBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 
 namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
@@ -121,6 +122,7 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
         /// <param name="model"></param>
         public void SaveReinforcedToWordFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetFullList");
             SaveToWord.CreateDoc(new WordInfo
             {
                 FileName = model.FileName,
@@ -134,11 +136,12 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
         /// <param name="model"></param>
         public void SaveReinforcedMaterialToExcelFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetReinforcedMaterials");
             SaveToExcel.CreateDoc(new ExcelInfo
             {
                 FileName = model.FileName,
                 Title = "Материалы по изделиям",
-                ReinforcedMaterials = GetReinforcedMaterials()
+                ReinforcedMaterials = (List<ReportReinforcedMaterialViewModel>)method.Invoke(this, null)
             });
         }
         /// <summary>
@@ -147,18 +150,20 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
         /// <param name="model"></param>
         public void SaveOrdersToPdfFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetOrders");
             SaveToPdf.CreateDoc(new PdfInfo
             {
                 FileName = model.FileName,
                 Title = "Список заказов",
                 DateFrom = model.DateFrom.Value,
                 DateTo = model.DateTo.Value,
-                Orders = GetOrders(model)
+                Orders = (List<ReportOrdersViewModel>)method.Invoke(this, new object[] { model })
             });
         }
 
         public void SaveStoreHousesToWordFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetReinforcedMaterials");
             SaveToWord.CreateDocStoreHouse(new WordInfoStoreHouse
             {
                 FileName = model.FileName,
@@ -169,21 +174,23 @@ namespace ReinforcedConcreteFactoryBusinessLogic.BusinessLogics
 
         public void SaveStoreHouseMaterialsToExcelFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetStoreHouseMaterials");
             SaveToExcel.CreateDocStoreHouse(new ExcelInfoStoreHouse
             {
                 FileName = model.FileName,
                 Title = "Список складов",
-                StoreHouseMaterials = GetStoreHouseMaterials()
+                StoreHouseMaterials = (List<ReportStoreHouseMaterialViewModel>)method.Invoke(this, null)
             });
         }
 
         public void SaveOrdersForAllDatesToPdfFile(ReportBindingModel model)
         {
+            MethodInfo method = GetType().GetMethod("GetOrdersForAllDates");
             SaveToPdf.CreateDocOrdersForAllDates(new PdfInfoOrdersForAllDates
             {
                 FileName = model.FileName,
                 Title = "Список заказов",
-                Orders = GetOrdersForAllDates()
+                Orders = (List<ReportOrdersForAllDatesViewModel>)method.Invoke(this, null)
             });
         }
     }

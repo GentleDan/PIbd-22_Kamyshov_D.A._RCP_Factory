@@ -1,6 +1,9 @@
 ﻿using ReinforcedConcreteFactoryBusinessLogic.BindingModels;
 using ReinforcedConcreteFactoryBusinessLogic.BusinessLogics;
+using ReinforcedConcreteFactoryBusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -26,9 +29,13 @@ namespace ReinforcedConcreteFactoryView
                 {
                     try
                     {
-                        logic.SaveStoreHouseMaterialsToExcelFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveStoreHouseMaterialsToExcelFile");
+                        method.Invoke(logic, new object[]
                         {
-                            FileName = dialog.FileName
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                            }
                         });
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -44,7 +51,8 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                var storeHouseMaterials = logic.GetStoreHouseMaterials();
+                MethodInfo method = logic.GetType().GetMethod("GetStoreHouseMaterials");
+                List<ReportStoreHouseMaterialViewModel> storeHouseMaterials = (List<ReportStoreHouseMaterialViewModel>)method.Invoke(logic, null);
                 if (storeHouseMaterials != null)
                 {
                     storeHouseMaterialsDataGridView.Rows.Clear();

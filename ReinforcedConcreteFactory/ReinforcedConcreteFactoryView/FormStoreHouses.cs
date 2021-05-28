@@ -23,14 +23,7 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                List<ReinforcedConcreteFactoryBusinessLogic.ViewModels.StoreHouseViewModel> list = logic.Read(null);
-                if (list != null)
-                {
-                    storehousesDataGridView.DataSource = list;
-                    storehousesDataGridView.Columns[0].Visible = false;
-                    storehousesDataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    storehousesDataGridView.Columns[4].Visible = false;
-                }
+                Program.ConfigGrid(logic.Read(null), storehousesDataGridView);
             }
             catch (Exception ex)
             {

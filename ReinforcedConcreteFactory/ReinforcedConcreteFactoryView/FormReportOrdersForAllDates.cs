@@ -1,7 +1,10 @@
 ﻿using Microsoft.Reporting.WinForms;
 using ReinforcedConcreteFactoryBusinessLogic.BindingModels;
 using ReinforcedConcreteFactoryBusinessLogic.BusinessLogics;
+using ReinforcedConcreteFactoryBusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -22,7 +25,8 @@ namespace ReinforcedConcreteFactoryView
         {
             try
             {
-                var dataSource = logic.GetOrdersForAllDates();
+                MethodInfo method = logic.GetType().GetMethod("GetOrdersForAllDates");
+                List<ReportOrdersForAllDatesViewModel> dataSource = (List<ReportOrdersForAllDatesViewModel>)method.Invoke(logic, null);
 
                 ReportDataSource source = new ReportDataSource("DataSetOrderDate", dataSource);
                 OrdersReportViewer.LocalReport.DataSources.Add(source);
@@ -43,9 +47,13 @@ namespace ReinforcedConcreteFactoryView
                 {
                     try
                     {
-                        logic.SaveOrdersForAllDatesToPdfFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveOrdersForAllDatesToPdfFile");
+                        method.Invoke(logic, new object[]
                         {
-                            FileName = dialog.FileName
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                            }
                         });
 
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);

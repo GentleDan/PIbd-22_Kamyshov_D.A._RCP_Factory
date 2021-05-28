@@ -1,6 +1,9 @@
 ﻿using ReinforcedConcreteFactoryBusinessLogic.BindingModels;
 using ReinforcedConcreteFactoryBusinessLogic.BusinessLogics;
+using ReinforcedConcreteFactoryBusinessLogic.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using Unity;
 
@@ -16,11 +19,13 @@ namespace ReinforcedConcreteFactoryView
             InitializeComponent();
             this.logic = logic;
         }
-        private void FormReportProductComponents_Load(object sender, EventArgs e)
+        private void FormReportReinforcedMaterials_Load(object sender, EventArgs e)
         {
             try
             {
-                var dict = logic.GetReinforcedMaterials();
+                MethodInfo method = logic.GetType().GetMethod("GetReinforcedMaterials");
+
+                List<ReportReinforcedMaterialViewModel> dict = (List<ReportReinforcedMaterialViewModel>)method.Invoke(logic, null);
                 if (dict != null)
                 {
                     reportReinforcedMaterialsDataGridView.Rows.Clear();
@@ -51,9 +56,13 @@ namespace ReinforcedConcreteFactoryView
                 {
                     try
                     {
-                        logic.SaveReinforcedMaterialToExcelFile(new ReportBindingModel
+                        MethodInfo method = logic.GetType().GetMethod("SaveReinforcedMaterialToExcelFile");
+                        method.Invoke(logic, new object[]
                         {
-                            FileName = dialog.FileName
+                            new ReportBindingModel
+                            {
+                                FileName = dialog.FileName,
+                            }
                         });
                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
